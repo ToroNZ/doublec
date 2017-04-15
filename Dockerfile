@@ -26,4 +26,4 @@ COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 777 /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-EXPOSE 80 443
+EXPOSE 80
