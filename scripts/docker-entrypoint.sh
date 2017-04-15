@@ -12,6 +12,7 @@ mysqladmin reload
 line_old='<h2 id="title"><a href="http://www.zoneminder.com" target="ZoneMinder">ZoneMinder</a>'
 line_new='<h2 id="title"><a href="https://www.doublec.tv" target="DoubleC">DoubleC.tv</a>'
 sed -i "s%$line_old%$line_new%g" /usr/share/zoneminder/www/skins/classic/views/console.php
+wget -O /usr/share/zoneminder/www/graphics/favicon.ico "https://filer.sensaway.co.nz/f/a8a654f726/?dl=1"
 
 systemctl enable zoneminder
 /etc/init.d/zoneminder start
