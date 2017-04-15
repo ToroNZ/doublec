@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "date.timezone = Pacific/Auckland" >> /etc/php/7.0/apache2/php.ini
+echo "date.timezone = $PHP_TIMEZONE" >> /etc/php/7.0/apache2/php.ini
 
 /etc/init.d/mysql start
 
