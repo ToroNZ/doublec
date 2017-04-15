@@ -3,7 +3,7 @@ MAINTAINER Tomas Maggio <info@sensaway.co.nz>
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get install -y python-software-properties
+RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:iconnor/zoneminder
 RUN apt-get update
 RUN apt-get install -y mysql-server \
