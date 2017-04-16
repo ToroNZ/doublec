@@ -33,6 +33,9 @@ line_old3='ScriptAlias /zm/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
 line_new3='ScriptAlias /zoneminder/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
 sed -i "s%$line_old3%$line_new3%g" /etc/apache2/conf-available/zoneminder.conf
 
+#Update php.ini to allow reverse proxing
+wget -O /usr/share/zoneminder/www/index.php https://raw.githubusercontent.com/ToroNZ/doublec/master/scripts/php.ini
+
 systemctl enable zoneminder
 /etc/init.d/zoneminder start
 /etc/init.d/apache2 restart
