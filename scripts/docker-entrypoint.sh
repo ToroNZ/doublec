@@ -39,6 +39,9 @@ wget -O /usr/share/zoneminder/www/index.php https://raw.githubusercontent.com/To
 #Update MySQL settings to allow for some ZM table instructions
 echo 'sql_mode = NO_ENGINE_SUBSTITUTION' >> /etc/mysql/mysql.conf.d/mysqld.cnf
 
+#Change Apache2 config to force follow simlinks
+sed -i "s%SymLinksIfOwnerMatch%FollowSymLinks%g" /etc/apache2/conf-enabled/zoneminder.conf
+
 systemctl enable zoneminder
 /etc/init.d/zoneminder start
 /etc/init.d/apache2 restart
