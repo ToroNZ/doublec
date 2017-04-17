@@ -9,7 +9,8 @@ mysql -u root -e "GRANT ALL ON zm.* to 'zmuser'@localhost identified by 'zmpass'
 mysqladmin reload
 
 #Set NTP Timezone
-timedatectl set-timezone Pacific/Auckland
+service ntp start
+#timedatectl set-timezone Pacific/Auckland
 
 ### Customize ZM
 # Update Main page title
