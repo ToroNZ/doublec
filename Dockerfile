@@ -46,5 +46,6 @@ RUN a2enmod rewrite
 COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 777 /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
+RUN echo "Open Zoneminder in a web browser (http://server-ip/zm). Click on Options - Paths and change PATH_ZMS to /zm/cgi-bin/nph-zms Click the Save button. Press enter to continue"
+RUN echo "If you plan to use the API go to https://wiki.zoneminder.com/Ubuntu_Server_16.04_64-bit_with_Zoneminder_1.30.0_the_easy_way and follow the instructions for the API fix. Press Enter to finish."
 EXPOSE 80
