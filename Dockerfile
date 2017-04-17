@@ -43,6 +43,7 @@ RUN apt-get clean
 RUN adduser www-data video
 RUN chmod 740 /etc/zm/zm.conf
 RUN chown root:www-data /etc/zm/zm.conf
+RUN chown www-data /dev/shm
 RUN chown -R www-data:www-data /usr/share/zoneminder
 
 RUN a2enconf zoneminder
