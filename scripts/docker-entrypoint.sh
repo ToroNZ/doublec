@@ -36,6 +36,9 @@ sed -i "s%$line_old3%$line_new3%g" /etc/apache2/conf-available/zoneminder.conf
 #Update php.ini to allow reverse proxing
 wget -O /usr/share/zoneminder/www/index.php https://raw.githubusercontent.com/ToroNZ/doublec/master/scripts/php.ini
 
+#Update MySQL settings to allow for some ZM table instructions
+echo 'sql_mode = NO_ENGINE_SUBSTITUTION' >> /etc/mysql/mysql.conf.d/mysqld.cnf
+
 systemctl enable zoneminder
 /etc/init.d/zoneminder start
 /etc/init.d/apache2 restart
