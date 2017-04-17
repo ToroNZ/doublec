@@ -46,8 +46,10 @@ echo 'sql_mode = NO_ENGINE_SUBSTITUTION' >> /etc/mysql/mysql.conf.d/mysqld.cnf
 #sed -i 's%"/usr/lib/zoneminder/cgi-bin"%/usr/lib/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
 
 systemctl enable zoneminder
+/etc/init.d/mysql restart
 /etc/init.d/zoneminder start
 /etc/init.d/apache2 restart
+
 
 echo "Open Zoneminder in a web browser (http://server-ip/zm). Click on Options - Paths and change PATH_ZMS to /zm/cgi-bin/nph-zms Click the Save button. Press enter to continue"
 echo "If you plan to use the API go to https://wiki.zoneminder.com/Ubuntu_Server_16.04_64-bit_with_Zoneminder_1.30.0_the_easy_way and follow the instructions for the API fix. Press Enter to finish."
