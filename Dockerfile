@@ -35,6 +35,7 @@ RUN apt-get install -y mysql-server \
     php-gettext \
     php-apcu \
     php-gd \
+    vim \
     zoneminder
 RUN apt-get clean
 
