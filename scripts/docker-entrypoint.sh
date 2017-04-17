@@ -27,11 +27,11 @@ sed -i "s%$line_old2%$line_new2%g" /usr/share/zoneminder/www/skins/classic/inclu
 
 ### Change PATH_ZMS under options:
 ##From "/cgi-bin/nph-zms" to "/zoneminder/cgi-bin/nph-zms"
-mkdir /usr/lib/cgi-bin/nph-zms
-ln -s /usr/lib/zoneminder/cgi-bin/nph-zms /usr/lib/cgi-bin/nph-zms
-line_old3='ScriptAlias /zm/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
-line_new3='ScriptAlias /zoneminder/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
-sed -i "s%$line_old3%$line_new3%g" /etc/apache2/conf-available/zoneminder.conf
+#mkdir /usr/lib/cgi-bin/nph-zms
+#ln -s /usr/lib/zoneminder/cgi-bin/nph-zms /usr/lib/cgi-bin/nph-zms
+#line_old3='ScriptAlias /zm/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
+#line_new3='ScriptAlias /zoneminder/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
+#sed -i "s%$line_old3%$line_new3%g" /etc/apache2/conf-available/zoneminder.conf
 
 #Update php.ini to allow reverse proxing
 wget -O /usr/share/zoneminder/www/index.php https://raw.githubusercontent.com/ToroNZ/doublec/master/scripts/php.ini
@@ -40,7 +40,7 @@ wget -O /usr/share/zoneminder/www/index.php https://raw.githubusercontent.com/To
 echo 'sql_mode = NO_ENGINE_SUBSTITUTION' >> /etc/mysql/mysql.conf.d/mysqld.cnf
 
 #Change Apache2 config to force follow simlinks
-sed -i "s%SymLinksIfOwnerMatch%FollowSymLinks%g" /etc/apache2/conf-enabled/zoneminder.conf
+#sed -i "s%SymLinksIfOwnerMatch%FollowSymLinks%g" /etc/apache2/conf-enabled/zoneminder.conf
 #Change Apache2 config to modify PATH_ZMS stuff after creating the symlinks above
 #sed -i 's%/zoneminder/cgi-bin%/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
 #sed -i 's%"/usr/lib/zoneminder/cgi-bin"%/usr/lib/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
@@ -48,5 +48,8 @@ sed -i "s%SymLinksIfOwnerMatch%FollowSymLinks%g" /etc/apache2/conf-enabled/zonem
 systemctl enable zoneminder
 /etc/init.d/zoneminder start
 /etc/init.d/apache2 restart
+
+echo "Open Zoneminder in a web browser (http://server-ip/zm). Click on Options - Paths and change PATH_ZMS to /zm/cgi-bin/nph-zms Click the Save button. Press enter to continue"
+echo "If you plan to use the API go to https://wiki.zoneminder.com/Ubuntu_Server_16.04_64-bit_with_Zoneminder_1.30.0_the_easy_way and follow the instructions for the API fix. Press Enter to finish."
 
 tail -F n0 /dev/null
