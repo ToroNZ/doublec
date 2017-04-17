@@ -9,6 +9,8 @@ RUN add-apt-repository -y ppa:iconnor/zoneminder
 RUN apt-get update
 RUN apt-get install -y mysql-server \
     apache2 \
+    htop \
+    wget \
     php7.0 \
     libapache2-mod-php7.0 \
     php7.0-mysql \
