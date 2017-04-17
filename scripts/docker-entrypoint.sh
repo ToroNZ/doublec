@@ -41,6 +41,9 @@ echo 'sql_mode = NO_ENGINE_SUBSTITUTION' >> /etc/mysql/mysql.conf.d/mysqld.cnf
 
 #Change Apache2 config to force follow simlinks
 sed -i "s%SymLinksIfOwnerMatch%FollowSymLinks%g" /etc/apache2/conf-enabled/zoneminder.conf
+#Change Apache2 config to modify PATH_ZMS stuff after creating the symlinks above
+sed -i 's%/zoneminder/cgi-bin%/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
+sed -i 's%"/usr/lib/zoneminder/cgi-bin"%/usr/lib/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
 
 systemctl enable zoneminder
 /etc/init.d/zoneminder start
