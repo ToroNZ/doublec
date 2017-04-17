@@ -8,6 +8,9 @@ mysql -u root < /usr/share/zoneminder/db/zm_create.sql
 mysql -u root -e "GRANT ALL ON zm.* to 'zmuser'@localhost identified by 'zmpass';"
 mysqladmin reload
 
+#Set NTP Timezone
+timedatectl set-timezone Pacific/Auckland
+
 ### Customize ZM
 # Update Main page title
 line_old='<h2 id="title"><a href="http://www.zoneminder.com" target="ZoneMinder">ZoneMinder</a>'
