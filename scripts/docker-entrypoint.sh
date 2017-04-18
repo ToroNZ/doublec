@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "date.timezone = $PHP_TIMEZONE" >> /etc/php/7.0/apache2/php.ini
+#Comment out if passing a variable from Dockerfile
+#echo "date.timezone = $PHP_TIMEZONE" >> /etc/php/7.0/fpm/php.ini
+sed -i 's/\;date.timezone =/date.timezone = \"Pacific\/Auckland\"/'
 
 /etc/init.d/mysql start
 
@@ -11,6 +13,9 @@ mysqladmin reload
 #Set NTP Timezone
 service ntp start
 #timedatectl set-timezone Pacific/Auckland
+
+#Change nginx conf to reflect new domain instance
+sed -i 's/example.com/$WWW_DOMAIN/' /etc/nginx/conf.d/backend.conf
 
 ### Customize ZM
 # Update Main page title
@@ -29,29 +34,28 @@ line_old2='<title><?php echo ZM_WEB_TITLE_PREFIX ?> - <?php echo validHtmlStr($t
 line_new2='<title>DoubleC.tv - Console</title>'
 sed -i "s%$line_old2%$line_new2%g" /usr/share/zoneminder/www/skins/classic/includes/functions.php
 
-### Change PATH_ZMS under options:
-##From "/cgi-bin/nph-zms" to "/zoneminder/cgi-bin/nph-zms"
-#mkdir /usr/lib/cgi-bin/nph-zms
-#ln -s /usr/lib/zoneminder/cgi-bin/nph-zms /usr/lib/cgi-bin/nph-zms
-#line_old3='ScriptAlias /zm/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
-#line_new3='ScriptAlias /zoneminder/cgi-bin "/usr/lib/zoneminder/cgi-bin"'
-#sed -i "s%$line_old3%$line_new3%g" /etc/apache2/conf-available/zoneminder.conf
-
 #Update php.ini to allow reverse proxing
 wget -O /usr/share/zoneminder/www/index.php https://raw.githubusercontent.com/ToroNZ/doublec/master/scripts/php.ini
 
+#Initialize MariaDB setup
+sudo mysql_secure_installation
+#Install ZM
+sudo apt-get install zoneminder
+#Set permissions
+sudo chmod 740 /etc/zm/zm.conf
+sudo chown root:www-data /etc/zm/zm.conf
+sudo chown www-data /dev/shm
+sudo chown -R www-data:www-data /usr/share/zoneminder
+sudo chown -R www-data:www-data /var/cache/zoneminder
+sudo a2enmod cgi
+sudo a2enconf zoneminder
+sudo a2enmod rewrite
 #Update MySQL settings to allow for some ZM table instructions
 echo 'sql_mode = NO_ENGINE_SUBSTITUTION' >> /etc/mysql/mysql.conf.d/mysqld.cnf
 
-#Change Apache2 config to force follow simlinks
-#sed -i "s%SymLinksIfOwnerMatch%FollowSymLinks%g" /etc/apache2/conf-enabled/zoneminder.conf
-#Change Apache2 config to modify PATH_ZMS stuff after creating the symlinks above
-#sed -i 's%/zoneminder/cgi-bin%/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
-#sed -i 's%"/usr/lib/zoneminder/cgi-bin"%/usr/lib/cgi-bin/%' /etc/apache2/conf-enabled/zoneminder.conf
-
-systemctl enable zoneminder
-/etc/init.d/mysql restart
-/etc/init.d/zoneminder start
-/etc/init.d/apache2 restart
+sudo systemctl enable zoneminder
+sudo systemctl restart mysql
+sudo systemctl start zoneminder
+sudo systemctl reload nginx
 
 tail -F n0 /dev/null
