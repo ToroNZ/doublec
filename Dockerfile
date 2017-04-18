@@ -1,21 +1,28 @@
 FROM ubuntu
 MAINTAINER Tomas Maggio <info@sensaway.co.nz>
 
+ENV DEBCONF_NONINTERACTIVE_SEEN=true
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Pacific/Auckland
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+RUN apt-get update && \
+      apt-get -y install sudo
+RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
 RUN apt-get update
 RUN apt-get install -y software-properties-common wget
 RUN add-apt-repository -y ppa:iconnor/zoneminder
 RUN apt-get update
-RUN apt-get install -y mysql-server \
-    apache2 \
+RUN apt-get install -y mariadb-server \
+    mariadb-client \
+    nginx \
+    nginx-extras \
+    fcgiwrap \
+    php7.0-fpm \
     ntp \
     htop \
     wget \
     php7.0 \
-    libapache2-mod-php7.0 \
     php7.0-mysql \
     php7.0-curl \
     php7.0-gd \
@@ -36,23 +43,23 @@ RUN apt-get install -y mysql-server \
     php-apcu \
     php-gd \
     vim \
-    zoneminder
+    usbutils \
 RUN apt-get clean
 
-
 RUN adduser www-data video
-RUN chmod 740 /etc/zm/zm.conf
-RUN chown root:www-data /etc/zm/zm.conf
-RUN chown www-data /dev/shm
-RUN chown -R www-data:www-data /usr/share/zoneminder
+COPY backend.conf /etc/nginx/conf.d/backend.conf
 
-RUN a2enconf zoneminder
-RUN a2enmod cgi
-RUN a2enmod rewrite
+#Comment out if using Apache2
+#RUN a2enconf zoneminder
+#RUN a2enmod cgi
+#RUN a2enmod rewrite
 
 COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 777 /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+RUN adduser www-data video
+USER docker
+CMD ["/docker-entrypoint.sh"]
+#ENTRYPOINT ["/docker-entrypoint.sh"]
 RUN echo "Open Zoneminder in a web browser (http://server-ip/zm). Click on Options - Paths and change PATH_ZMS to /zm/cgi-bin/nph-zms Click the Save button. Press enter to continue"
 RUN echo "If you plan to use the API go to https://wiki.zoneminder.com/Ubuntu_Server_16.04_64-bit_with_Zoneminder_1.30.0_the_easy_way and follow the instructions for the API fix. Press Enter to finish."
 EXPOSE 80
