@@ -58,6 +58,7 @@ COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 777 /docker-entrypoint.sh
 RUN adduser www-data video
 USER docker
+RUN export XDG_RUNTIME_DIR=/run/user/`id -u`
 CMD ["/docker-entrypoint.sh"]
 #ENTRYPOINT ["/docker-entrypoint.sh"]
 RUN echo "Open Zoneminder in a web browser (http://server-ip/zm). Click on Options - Paths and change PATH_ZMS to /zm/cgi-bin/nph-zms Click the Save button. Press enter to continue"
