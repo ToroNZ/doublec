@@ -43,7 +43,7 @@ RUN apt-get install -y mariadb-server \
     php-apcu \
     php-gd \
     vim \
-    usbutils \
+    usbutils
 RUN apt-get clean
 
 RUN adduser www-data video
